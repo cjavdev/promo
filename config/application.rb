@@ -22,6 +22,7 @@ module Promo
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
+    config.hosts = nil
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -33,5 +34,6 @@ module Promo
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.active_job.queue_adapter = :sidekiq
   end
 end

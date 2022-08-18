@@ -1,0 +1,64 @@
+<% content_for :page_title do "@#{@connection.username}" end %>
+
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="px-4 sm:px-6 lg:px-8 pt-12">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Bookmarks</h1>
+      <p class="mt-2 text-sm text-gray-700">A list of all the bookmarks in your account.</p>
+    </div>
+  </div>
+  <div class="mt-8 flex flex-col">
+    <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">User</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tweet</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tweeted</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                  <span class="sr-only">View</span>
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                  <span class="sr-only">Train</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <% @bookmarks.each do |bookmark| %>
+                <tr>
+                  <td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                    <h4 class="text-gray-900"><%= bookmark.name %></h4>
+                    <span class="text-gray-500">
+                      <a href="http://twitter.com/<%= bookmark.username %>" class="underline">
+                        @<%= bookmark.username %>
+                      </a>
+                    </span>
+                  </td>
+                  <td class="px-3 py-4 text-sm text-gray-500"><%= bookmark.text %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= time_ago_in_words(bookmark.created_at) %></td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                    <a href="http://twitter.com/<%= bookmark.username %>/status/<%= bookmark.tweet_id %>" class="text-indigo-600 hover:text-indigo-900">
+                      View
+                    </a>
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                    <form action="/training_samples" method="POST" data-turbo="false">
+                      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                      <input type="hidden" name="training_sample[tweet_id]" value="<%= bookmark.tweet_id %>">
+                      <button type="submit" class="bg-indigo-600 hover:bg-indigo-900 p-3 m-3 rounded-md text-white">
+                        Train
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

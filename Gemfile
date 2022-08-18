@@ -57,13 +57,21 @@ group :development, :test do
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem "byebug", "~> 11.1"
+  gem "letter_opener", "~> 1.8"
+  gem "annotate", "~> 3.2"
+  gem "pry-rails", "~> 0.3.9"
 end
 
+gem "omniauth-google-oauth2", "~> 1.0"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem "devise", "~> 4.8"
+gem "google-api-client", "~> 0.53.0"
+gem "ruby-openai", "~> 1.4"
+gem "sidekiq", "~> 6.5"
+gem 'rest-client'
+gem "stripe", "~> 7.0"
+gem "signet", "~> 0.17.0"
+
+gem "omniauth-twitter2", "~> 0.1.0"

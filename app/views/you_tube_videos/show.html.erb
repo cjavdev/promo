@@ -1,0 +1,51 @@
+<%= turbo_stream_from @video, :suggestions %>
+<%= turbo_stream_from @video %>
+
+<%= render partial: 'you_tube_videos/you_tube_video', locals: { video: @video } %>
+
+<div class="md:flex mt-12 pt-4 md:items-center md:justify-between">
+  <div class="flex-1 min-w-0">
+    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+      Suggestions
+    </h2>
+  </div>
+</div>
+
+<div class="grid grid-cols-4 gap-4 mt-4">
+
+  <nav class="space-y-1" aria-label="Sidebar">
+    <!-- This example requires Tailwind CSS v2.0+ -->
+    <form action="/suggestions" method="POST" data-turbo="false" class="mb-4 w-full">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="suggestion[you_tube_video_id]" value="<%= @video.id %>">
+      <button type="submit" value="<%= @destination.id %>" name="suggestion[destination_id]" class="block w-full flex-auto items-center px-4 py-2 rounded-md border border-gray-900 bg-gray-300 hover:bg-gray-500 text-sm text-gray-900 font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+        Think of a <%= @destination.name %> 🧠
+      </button>
+    </form>
+
+
+    <% Destination.all.each_with_index do |destination, i| %>
+      <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
+      <% if params[:destination_id].to_i == destination.id || params[:destination_id].nil? && destination.id == Destination.first.id %>
+      <% add = "bg-gray-100 text-gray-900" %>
+      <% else %>
+      <% add = "text-gray-600 hover:bg-gray-50 hover:text-gray-900" %>
+      <% end %>
+      <a href="<%= url_for(params.permit!.merge(destination_id: destination.id)) %>" class="<%= add %> group flex items-center px-3 py-2 text-sm font-medium rounded-md" aria-current="page">
+        <span class="truncate"> <%= destination.name.pluralize %> </span>
+        <span class="bg-white ml-auto inline-block py-0.5 px-3 text-xs rounded-full">
+          <%= @video.suggestions.where(destination_id: destination.id).count %>
+        </span>
+      </a>
+    <% end %>
+  </nav>
+
+  <div class="col-span-3 grid grid-cols-2 gap-4 font-chirp">
+    <% @suggestions.each do |suggestion| %>
+      <%= render partial: 'suggestions/suggestion', locals: { suggestion: suggestion } %>
+      <!-- <% if Rails.env.development? %> -->
+      <!--   <div><%= suggestion.prompt %></div> -->
+      <!-- <% end %> -->
+    <% end %>
+  </div>
+</div>

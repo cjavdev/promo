@@ -1,0 +1,150 @@
+<div class="md:flex md:items-center md:justify-between">
+  <div class="flex-1 min-w-0">
+    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Sources</h2>
+  </div>
+  <div class="mt-4 flex md:mt-0 md:ml-4">
+    <a href="/auth/twitter2" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Connect Twitter</a>
+    <a href="/you_tube_connections/new" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Connect YouTube</a>
+  </div>
+</div>
+
+<% @twitter_connections.each do |connection| %>
+<div class="rounded-lg bg-white overflow-hidden shadow mt-8">
+  <h2 class="sr-only" id="profile-overview-title">Channel Overview</h2>
+  <div class="bg-white p-6">
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <div class="sm:flex sm:space-x-5">
+        <div class="flex-shrink-0">
+          <%= image_tag "twitter_logo.png", class: "h-20" %>
+        </div>
+        <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+          <p class="text-xl font-bold text-gray-900 sm:text-2xl">@<%= connection.username %></p>
+          <p class="text-sm font-medium text-gray-600">
+          <a href="https://twitter.com/<%= connection.username %>">twitter.com/<%= connection.username %></a>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-center sm:mt-0 gap-2">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          Connected
+        </span>
+        <a href="<%= twitter_connection_path(connection) %>" class="ml-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-500 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          View
+        </a>
+        <form action="<%= you_tube_connection_path(connection) %>" method="POST">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="flex justify-center items-center px-4 py-2 shadow-sm text-sm font-medium rounded-md text-red-500 bg-white hover:bg-red-50">
+            Disconnect
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+    <div class="px-6 py-5 text-sm font-medium text-center">
+      <span class="text-gray-900"><%= connection.public_metrics[:followers_count] %></span>
+      <span class="text-gray-600">Followers</span>
+    </div>
+
+    <div class="px-6 py-5 text-sm font-medium text-center">
+      <span class="text-gray-900"><%= connection.public_metrics[:tweet_count] %></span>
+      <span class="text-gray-600">Tweets</span>
+    </div>
+
+    <div class="px-6 py-5 text-sm font-medium text-center">
+      <span class="text-gray-900"><%= 384 %></span>
+      <span class="text-gray-600">Bookmarks</span>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% @you_tube_connections.each do |connection| %>
+<% connection.channels.each do |channel| %>
+<div class="rounded-lg bg-white overflow-hidden shadow mt-8">
+  <h2 class="sr-only" id="profile-overview-title">Channel Overview</h2>
+  <div class="bg-white p-6">
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <div class="sm:flex sm:space-x-5">
+        <div class="flex-shrink-0">
+          <%= image_tag "yt_icon.png", class: "h-20" %>
+        </div>
+        <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+          <p class="text-xl font-bold text-gray-900 sm:text-2xl"><%= channel.snippet.title %></p>
+          <p class="text-sm font-medium text-gray-600">
+          <% if channel.snippet.custom_url %>
+          <a href="https://youtube.com/<%= channel.snippet.custom_url %>">youtube.com/<%= channel.snippet.custom_url %></a>
+          <% else %>
+          <a href="https://youtube.com/<%= channel.id %>">youtube.com/<%= channel.id %></a>
+          <% end %>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-center sm:mt-0 gap-2">
+        <% if !@channel_ids.include?(channel.id) %>
+        <form action="<%= you_tube_channels_path %>" method="POST">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+          <input type="hidden" name="channel[you_tube_id]" value="<%= channel.id %>" />
+          <input type="hidden" name="channel[banner_url]" value="<%= channel.branding_settings.image.try(:banner_external_url) %>" />
+          <input type="hidden" name="channel[custom_url]" value="<%= channel.snippet.custom_url %>" />
+          <input type="hidden" name="channel[keywords]" value="<%= channel.branding_settings.channel.keywords %>" />
+          <input type="hidden" name="channel[subscriber_count]" value="<%= channel.statistics.subscriber_count %>" />
+          <input type="hidden" name="channel[video_count]" value="<%= channel.statistics.video_count %>" />
+          <input type="hidden" name="channel[view_count]" value="<%= channel.statistics.view_count %>" />
+          <input type="hidden" name="channel[title]" value="<%= channel.snippet.title %>" />
+          <input type="hidden" name="channel[you_tube_connection_id]" value="<%= connection.id %>" />
+
+          <button type="submit" class="flex justify-center items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md text-blue-500 bg-white hover:bg-blue-50">
+            Enable
+          </button>
+        </form>
+        <% else %>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          Connected
+        </span>
+        <a href="<%= you_tube_channel_path(channel.id) %>" class="ml-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-500 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          View
+        </a>
+        <% end %>
+        <!--  -->
+        <!--   <form action="<%= you_tube_channel_path(channel.id) %>" method="POST"> -->
+        <!--     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" /> -->
+        <!--     <input type="hidden" name="_method" value="delete"> -->
+        <!--     <button type="submit" class="flex justify-center items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md text-red-500 bg-white hover:bg-red-50"> -->
+        <!--       Disable -->
+        <!--     </button> -->
+        <!--   </form> -->
+        <form action="<%= you_tube_connection_path(connection) %>" method="POST">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="flex justify-center items-center px-4 py-2 shadow-sm text-sm font-medium rounded-md text-red-500 bg-white hover:bg-red-50">
+            Disconnect
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+    <div class="px-6 py-5 text-sm font-medium text-center">
+      <span class="text-gray-900"><%= channel.statistics.subscriber_count %></span>
+      <span class="text-gray-600">Subscribers</span>
+    </div>
+
+    <div class="px-6 py-5 text-sm font-medium text-center">
+      <span class="text-gray-900"><%= channel.statistics.video_count %></span>
+      <span class="text-gray-600">Videos</span>
+    </div>
+
+    <div class="px-6 py-5 text-sm font-medium text-center">
+      <span class="text-gray-900"><%= number_with_delimiter(channel.statistics.view_count) %></span>
+      <span class="text-gray-600">Views</span>
+    </div>
+  </div>
+</div>
+<% end %>
+<% end %>

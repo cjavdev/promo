@@ -1,0 +1,88 @@
+<!-- <pre><%= JSON.pretty_generate(@videos) %></pre> -->
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Draft Videos</h1>
+      <p class="mt-2 text-sm text-gray-700"></p>
+    </div>
+  </div>
+  <div class="mt-8 flex flex-col">
+    <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+        <div class="relative overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+          <!-- Selected row actions, only show when rows are selected. -->
+          <!-- <div class="absolute top-0 left-12 flex h-12 items-center space-x-3 bg-gray-50 sm:left-16"> -->
+          <!--   <button type="button" class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30">Bulk edit</button> -->
+          <!--   <button type="button" class="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30">Delete all</button> -->
+          <!-- </div> -->
+
+          <table class="min-w-full table-fixed divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="relative w-12 px-6 sm:w-16 sm:px-8">
+                  <!-- <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 sm:left-6"> -->
+                </th>
+                <th scope="col" class="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">Video</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">ID</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <% @videos.items.each do |video| %>
+                <!-- Selected: "bg-gray-50" -->
+                <tr>
+                  <td class="relative w-12 px-6 sm:w-16 sm:px-8">
+                    <!-- Selected row marker, only show when row is selected. -->
+                    <!-- <div class="absolute inset-y-0 left-0 w-0.5 bg-blue-600"></div> -->
+                    <!-- <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 sm:left-6"> -->
+                  </td>
+
+                  <!-- Selected: "text-blue-600", Not Selected: "text-gray-900" -->
+                  <td class="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900"><%= video.snippet.title %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= video.id.video_id %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <% if !@promoted_video_ids.include?(video.id.video_id) %>
+                      <form action="/you_tube_videos" method="POST" data-turbo="false">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="hidden" name="video[title]" value="<%= video.snippet.title %>">
+                        <input type="hidden" name="video[you_tube_id]" value="<%= video.id.video_id %>">
+                        <input type="hidden" name="video[you_tube_channel_id]" value="<%= @channel.id %>">
+                        <input type="hidden" name="video[you_tube_connection_id]" value="<%= @channel.you_tube_connection_id %>">
+                        <button class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                          Promote
+                        </button>
+                      </form>
+                    <% else %>
+                      <a href="<%= you_tube_video_path(video.id.video_id) %>" class="ml-3 inline-flex items-center px-4 py-2 shadow-sm text-sm font-medium rounded text-blue-600 hover:bg-blue-100">
+                        View
+                      </a>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+              <!-- More people... -->
+            </tbody>
+          </table>
+          <!-- This example requires Tailwind CSS v2.0+ -->
+          <nav class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6" aria-label="Pagination">
+            <div class="hidden sm:block">
+              <p class="text-sm text-gray-700">
+              Showing
+              <span class="font-medium"><%= @videos.page_info.results_per_page %></span>
+              of
+              <span class="font-medium"><%= @videos.page_info.total_results %></span>
+              results
+              </p>
+            </div>
+            <div class="flex-1 flex justify-between sm:justify-end">
+              <a href="<%= you_tube_channel_path(@channel.you_tube_id, page_token: @videos.next_page_token)  %>" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </a>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

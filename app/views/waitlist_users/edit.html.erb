@@ -1,0 +1,40 @@
+<div class="pt-4 bg-gray-900 lg:overflow-hidden"></div>
+
+
+<div>
+  <div class="mx-auto max-w-7xl lg:px-8">
+    <div class="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+      <div class="lg:py-24">
+        <h1 class="mt-4 text-4xl tracking-tight font-extrabold sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
+          <span class="block">You're on the waitlist!</span>
+        </h1>
+
+        <p>We just need a bit more info</p>
+
+        <form action="<%= waitlist_user_path(@waitlist_user) %>" method="post" class="mt-4">
+          <input type="hidden" name="_method" value="PATCH">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+          <div class="mt-4">
+            <label for="channel" class="block text-sm font-medium text-gray-700">YouTube channel URL</label>
+            <div class="mt-1 flex rounded-md shadow-sm">
+              <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+                https://youtube.com/channel/
+              </span>
+              <input
+                  type="text"
+                  name="waitlist_user[you_tube_channel_url]"
+                  id="channel"
+                  class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border-gray-300"
+                  placeholder="UCUZHFZ9jIKrLroW8LcyJEQQ">
+            </div>
+          </div>
+
+          <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Update
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

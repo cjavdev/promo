@@ -1,0 +1,12 @@
+<div id="<%= dom_id(suggestion) %>">
+  <% case suggestion.destination.kind %>
+  <% when "Tweet" %>
+    <%= render partial: 'suggestions/tweet', locals: { suggestion: suggestion } %>
+  <% when "LinkedInPost" %>
+    <%= render partial: 'suggestions/linked_in_post', locals: { suggestion: suggestion } %>
+  <% when "YouTubeDescription" %>
+    <%= render partial: 'suggestions/you_tube_description', locals: { suggestion: suggestion } %>
+  <% when "BlogPost" %>
+    <%= render partial: 'suggestions/blog_post', locals: { suggestion: suggestion } %>
+  <% end %>
+</div>

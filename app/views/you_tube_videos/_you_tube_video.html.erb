@@ -1,0 +1,59 @@
+<div id="<%= dom_id(video) %>">
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+        <%= video.title %>
+      </h2>
+    </div>
+  </div>
+
+  <% if video.fetched? %>
+  <div class="grid grid-cols-4 gap-4 mt-4">
+    <div class="">
+      <iframe
+          width="100%"
+          src="https://www.youtube.com/embed/<%= video.you_tube_id %>"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+    </div>
+    <div class="col-span-3">
+      <div>
+        <dl class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+            <dt class="text-sm font-medium text-gray-500 truncate">Views</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= video.view_count %></dd>
+          </div>
+          <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+            <dt class="text-sm font-medium text-gray-500 truncate">Likes</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= video.like_count %></dd>
+          </div>
+
+          <div class="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+            <dt class="text-sm font-medium text-gray-500 truncate">Comments</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900"><%= video.comment_count %></dd>
+          </div>
+        </dl>
+      </div>
+      <div class="mt-4">
+        <form action="<%= you_tube_video_path(video) %>" method="post">
+          <input type="hidden" name="_method" value="patch">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <div>
+            <label for="comment" class="block text-sm font-medium text-gray-700">Edited transcript</label>
+            <div class="mt-1">
+              <textarea name="video[custom_captions]" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" rows="5" placeholder="Add custom captions..."><%= video.custom_captions || video.parsed_captions %></textarea>
+            </div>
+          </div>
+          <button type="submit" class="relative inline-flex rounded-lg mt-4 items-center px-4 py-2 border border-gray-300 bg-blue-600 hover:bg-blue-700 text-sm text-white font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+            Update transcript
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <% else %>
+  Loading...
+  <% end %>
+
+</div>

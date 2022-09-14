@@ -2,4 +2,4 @@ web: bin/rails server -p 3000
 js: yarn build --watch
 css: yarn build:css --watch
 worker: bundle exec sidekiq -c 2
-stripe: stripe listen --forward-to localhost:3000/webhooks/stripe
+stripe: stripe listen --forward-to localhost:3000/webhooks/stripe --config promo

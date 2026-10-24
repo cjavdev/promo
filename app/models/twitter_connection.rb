@@ -20,7 +20,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class TwitterConnection < ApplicationRecord
-  enum status: { inactive: 0, active: 1 }
+  enum :status, { inactive: 0, active: 1 }
   encrypts :credentials
   belongs_to :user
 

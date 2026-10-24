@@ -10,7 +10,7 @@
 #  updated_at        :datetime         not null
 #
 class YouTubeEvent < ApplicationRecord
-  enum status: {
+  enum :status, {
     pending: 0,
     processing: 1,
     processed: 2,

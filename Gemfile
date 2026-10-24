@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "4.0.9"
 
 # Use main development branch of Rails
-gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 8.1.0"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -13,7 +13,7 @@ gem "sprockets-rails"
 gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+gem "puma", ">= 6.0"
 
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
@@ -60,7 +60,7 @@ group :development do
   gem "web-console"
   gem "byebug", "~> 11.1"
   gem "letter_opener", "~> 1.8"
-  gem "annotate", "~> 3.2"
+  gem "annotaterb"
   gem "pry-rails", "~> 0.3.9"
 end
 
@@ -69,9 +69,11 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "devise", "~> 4.8"
 gem "google-api-client", "~> 0.53.0"
 gem "ruby-openai", "~> 1.4"
-gem "sidekiq", "~> 6.5"
+gem "sidekiq", "~> 8.0"
 gem 'rest-client'
 gem "stripe", "~> 7.0"
 gem "signet", "~> 0.17.0"
 
 gem "omniauth-twitter2", "~> 0.1.0"
+
+gem "csv"

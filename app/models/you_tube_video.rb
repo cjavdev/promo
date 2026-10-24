@@ -34,7 +34,7 @@
 #  fk_rails_...  (you_tube_connection_id => you_tube_connections.id)
 #
 class YouTubeVideo < ApplicationRecord
-  enum fetch_status: { pending: 0, fetching: 1, fetched: 2, failed: 3, }
+  enum :fetch_status, { pending: 0, fetching: 1, fetched: 2, failed: 3, }
   belongs_to :user
   belongs_to :you_tube_channel
   belongs_to :you_tube_connection
